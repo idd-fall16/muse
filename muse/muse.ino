@@ -50,7 +50,7 @@ void readHand() {
     if (digitalRead(bends)  == LOW) note += 1;
 
     // 0 is the corresponding mapping for which note
-    Serial.print("0,"); // can change this later
+    Serial.print("0 "); // can change this later
 
     // scale up to the same value by shifting 8
     // other pins have 12 bit ADC, only 4 bits in
@@ -63,7 +63,7 @@ void readHand() {
 
 void relay(int pin) {
     Serial.print(pin);
-    Serial.print(',');
+    Serial.print(' ');
     Serial.println(analogRead(pin));
 }
 
