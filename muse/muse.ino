@@ -15,7 +15,7 @@ SYSTEM_MODE(SEMI_AUTOMATIC);
 
 // analog pins
 int level = A0;
-int pitch = A1;
+int scale = A1;
 int tempo = A2;
 int drums = A3;
 int bends = A4;
@@ -28,7 +28,7 @@ int pinky  = D3;
 
 void setup() {
     pinMode(level, INPUT); // digital pin setup
-    pinMode(pitch, INPUT);
+    pinMode(scale, INPUT);
     pinMode(tempo, INPUT);
     pinMode(drums, INPUT);
     pinMode(bends, INPUT);
@@ -71,11 +71,11 @@ void loop() {
     readHand(); // compute and send current hand position
 
     relay(level);
-    relay(pitch);
+    relay(scale);
     relay(tempo);
     relay(drums);
     relay(bends);
 
-    delay(100);
+    delay(500);
 }
 
