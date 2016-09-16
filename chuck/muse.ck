@@ -64,16 +64,21 @@ while (true) {
 */
 
 class Muse {
-    // Setting up the carrier
-    PulseOsc pls => dac;
-    SinOsc sin => dac;
+    // Setting up envelope
+    ADSR env;
+    PRCRev reverb;
+    env.set(10::ms, 200::ms, 0.5, 100::ms);
 
-    1.0 => float iscale;
+    // Setting up the carrier
+    PulseOsc pls => env => reverb => dac;
+    SinOsc sin => dac;
+    env.keyOn();
+
+    // synth settings
     1.0 => float ibend;
-    1.0 => float imodu;
     0.5 => pls.width;
 
-    // background sin setup
+    // bg sin setup
     1.0 => sin.gain;
     440 => sin.freq;
 
@@ -89,29 +94,29 @@ class Muse {
         0.5 + (m/8196.0) => pls.width; // range from 0.25, 0.75
     }
 
-    // change background
+    // change bg gain
     fun void tempo (int t)
     {
-        t/4096.0 => sin.gain;
+        t/4096.0 => sin.gain; // range from 0, 1
     }
 
-    // change note scale
+    // change bg scale
     fun void scale (int s)
     {
-        1 + (s/1024.0) => iscale; // range from 1, 5
+        220.0 + s * 0.8 => sin.freq; // range from 440, 4496
     }
 
     // bend the frequency
     fun void bend (int b)
     {
-        0.95 + 1.0595 * (b/4096.0) => ibend;
+        0.95 + 1.0595 * (b/2048.0) => ibend;
     }
 
     // use whole notes w/ chuck library
     fun void pitch(int p)
     {
         if (p > 0)
-            Std.mtof(p + 20) * iscale * ibend => pls.freq;
+            Std.mtof(p + 36) * ibend => pls.freq;
         else
             p => pls.freq;
     }
