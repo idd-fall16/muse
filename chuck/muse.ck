@@ -61,8 +61,7 @@ while (true) {
 // change the gain level
 fun void level( int l )
 {
-    //l/4096 => c.gain;
-    2 => c.gain;
+    l/4096 => c.gain;
 }
 
 fun void scale( int s )
@@ -90,11 +89,9 @@ fun void bend( int b )
 // cf * Math.pow(ff, p) => c.freq;
 fun void pitch( int p )
 {
-    <<<p>>>;
-    c => dac;
     if (p > 0)
         Std.mtof(p + 40) => c.freq;
     else
-        c =< dac;
+        55 => c.freq;
 }
 
