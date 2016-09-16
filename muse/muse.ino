@@ -55,26 +55,26 @@ void readHand() {
 
     int gray;
     switch (note) {
-        case  1: gray = 1;
-        case  2: gray = 3;
-        case  3: gray = 2;
-        case  4: gray = 7;
-        case  5: gray = 6;
-        case  6: gray = 4;
-        case  7: gray = 5;
-        case  8: gray = 15;
-        case  9: gray = 14;
-        case 10: gray = 12;
-        case 11: gray = 13;
-        case 12: gray = 8;
-        case 13: gray = 9;
-        case 14: gray = 11;
-        case 15: gray = 10;
-        default: gray = 0;
+        case  1: gray = 1;  break;
+        case  2: gray = 3;  break;
+        case  3: gray = 2;  break;
+        case  4: gray = 7;  break;
+        case  5: gray = 6;  break;
+        case  6: gray = 4;  break;
+        case  7: gray = 5;  break;
+        case  8: gray = 15; break;
+        case  9: gray = 14; break;
+        case 10: gray = 12; break;
+        case 11: gray = 13; break;
+        case 12: gray = 8;  break;
+        case 13: gray = 9;  break;
+        case 14: gray = 11; break;
+        case 15: gray = 10; break;
+        default: gray = 0;  break;
     }
 
     // print gray scale version
-    Serial.println(note);
+    Serial.println(gray);
 }
 
 void relay(int pin) {
