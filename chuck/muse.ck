@@ -59,7 +59,7 @@ while (true) {
 - modu
 - width
 - bend
-- scale
+- scale, or perhaps background noise
 - pitch
 */
 
@@ -107,7 +107,8 @@ class Muse {
     // use whole notes w/ chuck library
     fun void pitch(int p)
     {
-        55 + (Math.sin(t) + 1) * Std.mtof(p + 20) * iscale * ibend => pls.freq;
+        p * (55 + (Math.sin(t) + 1)
+            * Std.mtof(p + 20) * iscale * ibend) => pls.freq;
     }
 }
 
