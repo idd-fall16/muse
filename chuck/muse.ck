@@ -42,11 +42,11 @@ while (true) {
         if (pin == 10)
             m.level(val);
         if (pin == 11)
-            m.scale(val);
+            m.modu(val);
         if (pin == 12)
             m.tempo(val);
         if (pin == 13)
-            m.chord(val);
+            m.scale(val);
         if (pin == 14)
             m.bend(val);
         if (pin == 15)
@@ -54,52 +54,60 @@ while (true) {
     }
 }
 
+/* Controls
+- gain
+- modu
+- width
+- bend
+- scale
+- pitch
+*/
+
 class Muse {
     // Setting up the carrier
-    SinOsc c => dac;
+    PulseOsc pls => dac;
+    0.5 => pls.width;
+    0.002 => float inc;
     1.0 => float iscale;
     1.0 => float ibend;
-    1.0 => float modf;
+    1.0 => float imodu;
+    0.0 => float t;
 
     // change the gain level
     fun void level (int l)
     {
-        l/1024.0 => c.gain; // range from 0, 4
+        l/1024.0 => pls.gain; // range from 0, 4
     }
 
-    // change carrier freq
+    // change duty cycle
+    fun void modu (int m)
+    {
+        0.5 + (m/8196.0) => pls.width; // range from 0.25, 0.75
+    }
+
+    // change inner freq
+    fun void tempo (int ti)
+    {
+        ti/8196.0 => inc; // range from 0, 0.5
+        t + inc => t;
+    }
+
+    // change note scale
     fun void scale (int s)
     {
-        s/256.0 => iscale; // range from 0, 16
-    }
-
-    fun void tempo (int t)
-    {
-    }
-
-    fun void chord (int d)
-    {
+        1 + (s/1024.0) => iscale; // range from 1, 5
     }
 
     // bend the frequency
     fun void bend (int b)
     {
-        (1 - b/2048.0) => ibend; // range from -1, 1
+        0.95 + 1.0595 * (b/4096.0) => ibend;
     }
 
-    // Multiple the root pitch by the fundamental frequency (ff) however many steps
-    // were given based on the amount of switches thrown down from the arduino
-    // only make main pitch noise when there is some input signal being played
-    // http://ptolemy.eecs.berkeley.edu/eecs20/week8/scale.html
-    // 1.0595 => float ff; // scale of any adjacent two notes
-    // scratch that, can use whole notes w/ chuck library
-    // 220 * Math.pow(ff, p) => c.freq;
+    // use whole notes w/ chuck library
     fun void pitch(int p)
     {
-        if (p > 0)
-            Std.mtof(p + 40) * (iscale) + ibend => c.freq;
-        else
-            55 * iscale  => c.freq;
+        30 + (Math.sin(t) + 1) * Std.mtof(p + 20) * iscale * ibend => pls.freq;
     }
 }
 
