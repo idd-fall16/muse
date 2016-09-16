@@ -14,11 +14,12 @@ SYSTEM_MODE(SEMI_AUTOMATIC);
 #endif
 
 // analog pins
-int level = A0;
-int scale = A1;
-int tempo = A2;
-int drums = A3;
-int bends = A4;
+int level = A0; // pin 10
+int scale = A1; // pin 11
+int tempo = A2; // pin 12
+int drums = A3; // pin 13
+int bends = A4; // pin 14
+// pin 15 is for note/pitch
 
 // digital pins
 int pointr = D0;
@@ -47,14 +48,14 @@ void readHand() {
     if (digitalRead(pointr) == LOW) note += 8;
     if (digitalRead(middle) == LOW) note += 4;
     if (digitalRead(ring)   == LOW) note += 2;
-    if (digitalRead(bends)  == LOW) note += 1;
+    if (digitalRead(pinky)  == LOW) note += 1;
 
     // 0 is the corresponding mapping for which note
-    Serial.print("0 "); // can change this later
+    Serial.print("15 "); // can change this later
 
     // scale up to the same value by shifting 8
     // other pins have 12 bit ADC, only 4 bits in
-    Serial.println(note << 8);
+    Serial.println(note);
 
     // ^^^
     // this could potentially throw an ambiguous type error, potentially
@@ -68,14 +69,14 @@ void relay(int pin) {
 }
 
 void loop() {
-    readHand(); // compute and send current hand position
-
     relay(level);
     relay(scale);
     relay(tempo);
     relay(drums);
     relay(bends);
 
-    delay(500);
+    readHand(); // compute and send current hand position
+    
+    delay(50); // don't clog up serial port
 }
 

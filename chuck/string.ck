@@ -1,4 +1,5 @@
 // this is really hacked: ConsoleInput class to be replaced soon
+// simple demo for how to parse strings from the command line
 
 // make a ConsoleInput
 ConsoleInput in;
@@ -6,20 +7,17 @@ ConsoleInput in;
 StringTokenizer tok;
 
 // loop
-while( true )
-{
+while( true ) {
     // prompt
     in.prompt( "enter line of text:" ) => now;
 
     // read
-    while( in.more() )
-    {
+    while( in.more() ) {
         // get it
         tok.set( in.getLine() );
 
         // print tokens
-        while( tok.more() )
-        {
+        while( tok.more() ) {
             // print it
             <<< tok.next(), "" >>>;
         }
