@@ -76,7 +76,7 @@ void loop() {
     relay(bends);
 
     readHand(); // compute and send current hand position
-    
+
     delay(50); // don't clog up serial port
 }
 

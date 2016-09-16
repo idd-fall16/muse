@@ -66,12 +66,16 @@ while (true) {
 class Muse {
     // Setting up the carrier
     PulseOsc pls => dac;
-    0.5 => pls.width;
-    0.002 => float inc;
+    SinOsc sin => dac;
+
     1.0 => float iscale;
     1.0 => float ibend;
     1.0 => float imodu;
-    0.0 => float t;
+    0.5 => pls.width;
+
+    // background sin setup
+    1.0 => sin.gain;
+    440 => sin.freq;
 
     // change the gain level
     fun void level (int l)
@@ -85,11 +89,10 @@ class Muse {
         0.5 + (m/8196.0) => pls.width; // range from 0.25, 0.75
     }
 
-    // change inner freq
-    fun void tempo (int ti)
+    // change background
+    fun void tempo (int t)
     {
-        ti/8196.0 => inc; // range from 0, 0.5
-        t + inc => t;
+        t/4096.0 => sin.gain;
     }
 
     // change note scale
@@ -107,8 +110,10 @@ class Muse {
     // use whole notes w/ chuck library
     fun void pitch(int p)
     {
-        p * (55 + (Math.sin(t) + 1)
-            * Std.mtof(p + 20) * iscale * ibend) => pls.freq;
+        if (p > 0)
+            Std.mtof(p + 20) * iscale * ibend => pls.freq;
+        else
+            p => pls.freq;
     }
 }
 
