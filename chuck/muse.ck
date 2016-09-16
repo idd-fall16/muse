@@ -3,9 +3,6 @@
 //******************************************************************
 
 
-// Setting up the carrier
-SinOsc c => dac;
-
 // Getting the serial device
 SerialIO.list() @=> string list[];
 for (int i; i < list.cap(); i++) {
@@ -33,65 +30,76 @@ if (!cereal.open(device, SerialIO.B9600, SerialIO.ASCII)) {
 // coming is discrete and depends on which fingers are being pressed. This value
 // ranges from 0 and 15 (2^4 fingers). The data is piped in from the arduino
 // based on which pin it was read from, and then applied relevantly.
+Muse m;
 while (true) {
     cereal.onLine() => now;
     cereal.getLine() => string line;
     if(line$Object != null) {
-        //chout <= "line: " <= line <= IO.newline();
         StringTokenizer tok; tok.set(line);
         Std.atoi(tok.next()) => int pin;
         Std.atoi(tok.next()) => int val;
 
         if (pin == 10)
-            level(val);
+            m.level(val);
         if (pin == 11)
-            scale(val);
+            m.scale(val);
         if (pin == 12)
-            tempo(val);
+            m.tempo(val);
         if (pin == 13)
-            drums(val);
+            m.chord(val);
         if (pin == 14)
-            bend(val);
+            m.bend(val);
         if (pin == 15)
-            pitch(val);
+            m.pitch(val);
     }
 }
 
+class Muse {
+    // Setting up the carrier
+    SinOsc c => dac;
+    1.0 => float iscale;
+    1.0 => float ibend;
+    1.0 => float modf;
 
-// change the gain level
-fun void level( int l )
-{
-    l/4096 => c.gain;
-}
+    // change the gain level
+    fun void level (int l)
+    {
+        l/1024.0 => c.gain; // range from 0, 4
+    }
 
-fun void scale( int s )
-{
-}
+    // change carrier freq
+    fun void scale (int s)
+    {
+        s/256.0 => iscale; // range from 0, 16
+    }
 
-fun void tempo( int t )
-{
-}
+    fun void tempo (int t)
+    {
+    }
 
-fun void drums( int d )
-{
-}
+    fun void chord (int d)
+    {
+    }
 
-fun void bend( int b )
-{
-}
+    // bend the frequency
+    fun void bend (int b)
+    {
+        (1 - b/2048.0) => ibend; // range from -1, 1
+    }
 
-// Multiple the root pitch by the fundamental frequency (ff) however many steps
-// were given based on the amount of switches thrown down from the arduino
-// only make main pitch noise when there is some input signal being played
-// http://ptolemy.eecs.berkeley.edu/eecs20/week8/scale.html
-// 1.0595 => float ff; // scale of any adjacent two notes
-// scratch that, can use whole notes w/ chuck library
-// cf * Math.pow(ff, p) => c.freq;
-fun void pitch( int p )
-{
-    if (p > 0)
-        Std.mtof(p + 40) => c.freq;
-    else
-        55 => c.freq;
+    // Multiple the root pitch by the fundamental frequency (ff) however many steps
+    // were given based on the amount of switches thrown down from the arduino
+    // only make main pitch noise when there is some input signal being played
+    // http://ptolemy.eecs.berkeley.edu/eecs20/week8/scale.html
+    // 1.0595 => float ff; // scale of any adjacent two notes
+    // scratch that, can use whole notes w/ chuck library
+    // 220 * Math.pow(ff, p) => c.freq;
+    fun void pitch(int p)
+    {
+        if (p > 0)
+            Std.mtof(p + 40) * (iscale) + ibend => c.freq;
+        else
+            55 * iscale  => c.freq;
+    }
 }
 
