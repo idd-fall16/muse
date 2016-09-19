@@ -1,6 +1,10 @@
 # Project Muse
 
-Video: https://www.youtube.com/watch?v=K369DbuJfyQ&feature=youtu.be
+Video: https://www.youtube.com/watch?v=IeB_q3hdOr4
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=IeB_q3hdOr4
+" target="_blank"><img src="http://img.youtube.com/vi/IeB_q3hdOr4/0.jpg"
+alt="" width="240" height="180" border="10" /></a>
 
 ```
 University of California, Berkeley
@@ -10,7 +14,7 @@ Music Controller Project
 
 - Payton Goodrich: Mechanical Design, Manufacturing
 - Scarlett Teng: Wiring, Manufacturing
-- Jeremy Warner: Software Design, Audio Interfacing
+- Jeremy Warner: Schematic Design, MCU/ChucK code
 
 ## Control Scheme
 
@@ -34,7 +38,7 @@ reach the computer (output) and musical glove (input) were included in the
 design.  The electronics cavity is covered by a top plate with through holes
 for mounting the four potentiometers and soft pot.
 
-Sijia assembling the armband [add image here]
+![fritzing](/schematic/breadboard.png)
 
 The musical glove was made by 3d printing four finger caps, which were designed
 based off the profile of Payton’s left index finger.  For the palm, we recycled
@@ -44,7 +48,7 @@ good conductivity.  By cleverly assigning the palm to ground and the four
 individual finger nodes as separate pull up resistors, we were able to create a
 4-bit system of digital input.
 
-final device prototyp [add image here]
+![final device prototype](/enclosure/prototype.jpg)
 
 Our electronic hardware consists of five analog sensors, and four digital
 sensors. The analog sensors are used to control the gain and background levels,
@@ -56,7 +60,9 @@ value that pin has. For example, one set of data as ‘10 1234’ means that pin
 has value 1234. We use this format because of its ease of parsing later on in
 the pipeline.
 
-This data is then uploaded to Chuck, an open-source synthesizer software that
+![Sijia assembling the armband](/enclosure/assembly.png)
+
+This data is then uploaded to ChucK, an open-source synthesizer software that
 has grown in popularity.  There is ChucK code that reads the serial input and
 connects it to components of two different waves that generate the user’s
 music. There is a background sine wave, which you can control both the gain and
@@ -74,6 +80,8 @@ interface required a fair bit of fiddling in ChucK, which was surprising given
 how elementary the desired control was. There is still refinement that could be
 performed to allow immediate access to the essential tone of our instrument,
 but it provides a decent mechanism for playing music.
+
+![]()
 
 We also encountered a good deal of manufacturing dilemmas.  The final design
 for the armband failed to print on two separate attempts - one from another
