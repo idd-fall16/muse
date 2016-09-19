@@ -4,7 +4,7 @@ Video: https://www.youtube.com/watch?v=IeB_q3hdOr4
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=IeB_q3hdOr4
 " target="_blank"><img src="http://img.youtube.com/vi/IeB_q3hdOr4/0.jpg"
-alt="" width="240" height="180" border="10" /></a>
+alt="" width="480" height="360" border="10" /></a>
 
 ```
 University of California, Berkeley
@@ -80,8 +80,6 @@ interface required a fair bit of fiddling in ChucK, which was surprising given
 how elementary the desired control was. There is still refinement that could be
 performed to allow immediate access to the essential tone of our instrument,
 but it provides a decent mechanism for playing music.
-
-![]()
 
 We also encountered a good deal of manufacturing dilemmas.  The final design
 for the armband failed to print on two separate attempts - one from another
